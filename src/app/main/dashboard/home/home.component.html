@@ -1,0 +1,126 @@
+<div class="content-wrapper container-fluid p-0">
+  <div class="content-body">
+    <!-- content-header component -->
+    <ng-container *ngIf="contentHeader">
+      <div class="content-header row">
+        <div class="content-header-left col-md-9 col-12 mb-2">
+          <div class="row breadcrumbs-top">
+            <div class="col-12 d-flex">
+              <h2 class="content-header-title float-left mb-0">
+                {{ contentHeader.headerTitle }}
+              </h2>
+              <!-- app-breadcrumb component -->
+              <app-breadcrumb
+                [breadcrumb]="contentHeader.breadcrumb"
+              ></app-breadcrumb>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Basic Alerts start -->
+    <section id="home-page">
+      <!-- Stats Horizontal Card -->
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="font-weight-bolder mb-0">
+                  {{ AllData?.totalSale }}
+                </h2>
+                <p class="card-text">Total Sale</p>
+              </div>
+              <div class="avatar bg-light-primary p-50 m-0">
+                <div class="avatar-content">
+                  <!-- <i data-feather="cpu" class="font-medium-5"></i> -->
+
+                  <!-- <img src="assets/images/icons/users.svg" alt=""> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="font-weight-bolder mb-0">
+                  {{ AllData?.orderCount }}
+                </h2>
+                <p class="card-text">Total Order Count</p>
+              </div>
+              <div class="avatar bg-light-success p-50 m-0">
+                <div class="avatar-content">
+                  <!-- <img src="assets/images/icons/user-x.svg" alt=""> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="font-weight-bolder mb-0">
+                  {{ AllData?.totalDiscount }}
+                </h2>
+                <p class="card-text">Total Discount</p>
+              </div>
+              <div class="avatar bg-light-danger p-50 m-0">
+                <div class="avatar-content">
+                  <!-- <img src="assets/images/icons/gift.svg" alt=""> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="font-weight-bolder mb-0">
+                  {{ AllData?.netProfit }}
+                </h2>
+                <p class="card-text">Total Net Profit</p>
+              </div>
+              <div class="avatar bg-light-warning p-50 m-0">
+                <div class="avatar-content">
+                  <!-- <img src="assets/images/icons/credit-card.svg" alt=""> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/ Stats Horizontal Card -->
+      <!--/ Stats Horizontal Card -->
+      <div class="row">
+        <div class="col-xl-6 col-md-6 col-sm-6">
+          <div class="card admin-img">
+            <div class="card-body">
+              <img
+                src="../../../../assets/images/pages/seller.svg"
+                alt=""
+                class="img-fluid"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-6">
+          <div class="card admin-img">
+            <div class="card-body">
+              <img
+                src="../../../../assets/images/pages/business.svg"
+                alt=""
+                class="img-fluid"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Basic Alerts end -->
+  </div>
+</div>

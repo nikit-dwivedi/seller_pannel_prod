@@ -1,0 +1,199 @@
+<div *ngIf="horizontalMenu" class="navbar-header d-xl-block d-none">
+  <!-- Navbar brand -->
+  <ul class="nav navbar-nav flex-row">
+    <li class="nav-item">
+      <a class="navbar-brand" [routerLink]="['/home']">
+        <span class="brand-logo">
+          <img
+            src="{{ coreConfig.app.appLogoImage }}"
+            alt="brand-logo"
+            width="220"
+          />
+        </span>
+        <!-- <h2 class="brand-text mb-0">{{ coreConfig.app.appName }}</h2> -->
+      </a>
+    </li>
+  </ul>
+  <!--/ Navbar brand -->
+</div>
+
+<div class="navbar-container d-flex content">
+  <div class="bookmark-wrapper d-flex align-items-center">
+    <!-- Menu Toggler | Menu icon will be hidden in case of layout without menu -->
+    <ul class="nav navbar-nav d-xl-none" *ngIf="!coreConfig.layout.menu.hidden">
+      <li class="nav-item">
+        <a class="nav-link menu-toggle" (click)="toggleSidebar('menu')">
+          <span [data-feather]="'menu'" [class]="'ficon'"></span>
+        </a>
+      </li>
+    </ul>
+    <!--/ Menu Toggler -->
+  </div>
+
+  <ul class="nav navbar-nav align-items-center ml-auto">
+    <li ngbDropdown class="nav-item dropdown-user">
+      <a
+        class="nav-link dropdown-toggle dropdown-user-link"
+        id="dropdown-user"
+        ngbDropdownToggle
+        id="navbarUserDropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <div class="user-nav d-sm-flex d-none">
+          <span class="user-name font-weight-bolder text-capitalize">{{
+            sellerData?.basicDetails?.sellerName
+          }}</span>
+        </div>
+        <span class="avatar"
+          ><img
+            class="round"
+            src="../../../../assets/images/icons/user-login.png"
+            alt="avatar"
+            height="40"
+            width="40" /><span class="avatar-status-online"></span
+        ></span>
+      </a>
+      <div
+        ngbDropdownMenu
+        aria-labelledby="navbarUserDropdown"
+        class="dropdown-menu dropdown-menu-right"
+      >
+        <a ngbDropdownItem (click)="viewSellerDetails(content)"
+          ><span [data-feather]="'user'" [class]="'mr-50'"></span>User
+          Details</a
+        >
+        <a ngbDropdownItem (click)="logout()"
+          ><span [data-feather]="'power'" [class]="'mr-50'"></span> Logout</a
+        >
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- open view user details Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel6">Seller Details</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div class="details-section">
+      <div class="row">
+        <div class="col-lg-4">
+          <h4 class="text-secondary font-weight-bolder">Basic Details</h4>
+
+          <div class="row">
+            <!-- <div class="col-lg-5"><p><strong>Merchant Name:</strong></p></div>
+              <div class="col-lg-7"><p>Aruna Lonkar</p></div> -->
+            <div class="col-lg-5">
+              <p><strong>Seller Name:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.sellerName }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>TradeName:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.tradeName }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>sellerType:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.sellerType }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>GST No:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.gstNo }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Pan Number:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.panNumber }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Phone:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.basicDetails?.phone }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="text-secondary font-weight-bolder">License Details</h4>
+
+          <div class="row">
+            <div class="col-lg-5">
+              <p><strong> Name On Licence :</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.licenseDetails?.nameOnlicence }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Licence Number:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.licenseDetails?.licenceNumber }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Issued On:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.licenseDetails?.issuedOn }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Tenure:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.licenseDetails?.tenure }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="text-secondary font-weight-bolder">
+            Authorized Person Details
+          </h4>
+
+          <div class="row">
+            <div class="col-lg-5">
+              <p><strong>Name:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.authorizedPersonDetails?.name }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Pan No:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.authorizedPersonDetails?.pan }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Phone No:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.authorizedPersonDetails?.phone }}</p>
+            </div>
+            <div class="col-lg-5">
+              <p><strong>Email:</strong></p>
+            </div>
+            <div class="col-lg-7">
+              <p>{{ sellerData?.authorizedPersonDetails?.email }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,57 @@
+<!-- vertical-layout -->
+<ng-container *ngIf="coreConfig.layout.type === 'vertical'">
+  <vertical-layout></vertical-layout>
+</ng-container>
+<!-- / vertical-layout -->
+
+<!-- horizontal-layout -->
+<ng-container *ngIf="coreConfig.layout.type === 'horizontal'">
+  <horizontal-layout></horizontal-layout>
+</ng-container>
+<!-- / horizontal-layout -->
+
+<!-- theme customizer -->
+<core-sidebar
+  name="themeCustomizer"
+  class="customizer d-none d-md-block"
+  [invisibleOverlay]="true"
+  *ngIf="coreConfig.layout.customizer"
+>
+  <a
+    class="customizer-toggle d-flex align-items-center justify-content-center"
+    (click)="toggleSidebar('themeCustomizer')"
+  >
+    <span [data-feather]="'settings'" [class]="'spinner'"></span>
+  </a>
+  <core-theme-customizer></core-theme-customizer>
+</core-sidebar>
+
+<!-- / theme customizer -->
+
+<!-- notification modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">New Order Recived</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0">
+    {{ NewNotification }}
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.dismiss('Cross click')"
+      routerLink="/dashboard/orders"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,670 @@
+<div class="content-wrapper container-fluid p-0">
+  <div class="content-body">
+    <section id="ngx-datatable-kitchen-sink">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h4 class="card-title">All Outlet</h4>
+            <!--  <button type="button" class="btn btn-primary mr-1" routerLink="/dashboard/addOutlet">
+                            Add Outlet +
+                        </button> -->
+            <button
+              class="btn btn-primary btn-add"
+              (click)="openAddOutletModal(content2)"
+            >
+              Add Outlet <i class="fa-regular fa-plus"></i>
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-12 mb-50"></div>
+            <div class="col-md-6 col-12">
+              <div
+                class="d-flex justify-content-between align-items-center m-1"
+              >
+                <label class="d-flex align-items-center"
+                  >Show
+                  <select
+                    class="form-control mx-25"
+                    [(ngModel)]="basicSelectedOption"
+                  >
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                  </select>
+                  entries</label
+                >
+              </div>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-md-end">
+              <div
+                class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0"
+              >
+                <label class="d-flex align-items-center"
+                  >Search<input
+                    type="search"
+                    placeholder="Search"
+                    class="form-control ml-25"
+                    (keyup)="filterUpdate($event)"
+                    (search)="filterUpdate($event)"
+                /></label>
+                <button
+                  csvLink
+                  (click)="downloadCSV($event)"
+                  class="btn btn-outline-secondary float-right csv-export"
+                  rippleEffect
+                >
+                  <img src="assets/images/excel-icon.png" alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <ngx-datatable
+            class="material container striped"
+            [columns]="cols"
+            [rows]="kitchenSinkRows"
+            [rowHeight]="58"
+            rowHeight="auto"
+            class="bootstrap core-bootstrap"
+            [limit]="5"
+            [columnMode]="ColumnMode.force"
+            [headerHeight]="40"
+            [footerHeight]="50"
+            [scrollbarH]="true"
+            [selectionType]="SelectionType.checkbox"
+            [limit]="basicSelectedOption"
+            (activate)="onActivate($event)"
+            (select)="onSelect($event)"
+          >
+            <ngx-datatable-column name="S.No." [width]="50" [sortable]="false">
+              <ng-template
+                ngx-datatable-cell-template
+                let-rowIndex="rowIndex"
+                let-row="row"
+              >
+                {{ rowIndex + 1 }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              name="Outlet Name"
+              prop="outletName"
+              [width]="150"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              name="Phone"
+              prop="phone"
+              [width]="150"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              name="Area"
+              prop="area"
+              [width]="150"
+            ></ngx-datatable-column>
+            <ngx-datatable-column name="Closed" prop="isClosed" [width]="150">
+              <ng-template
+                let-closeStatus="value"
+                let-row="row"
+                ngx-datatable-cell-template
+              >
+                <div class="form-check form-switch custom-control-success ml-3">
+                  <input
+                    class="form-check-input"
+                    [checked]="!closeStatus"
+                    [ngClass]="selectButtonClass(closeStatus)"
+                    (change)="statusChange($event, content, row)"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckChecked"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="flexSwitchCheckChecked"
+                  ></label>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column
+              name="Shop Address"
+              type="textarea"
+              prop="shopAddress"
+              [width]="300"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              name="Pending"
+              prop="pendingCount"
+              [width]="100"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              name="Prepering"
+              prop="preperingCount"
+              [width]="100"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              name="Ready"
+              prop="readyCount"
+              [width]="100"
+            ></ngx-datatable-column>
+
+            <ngx-datatable-column
+              name="Action"
+              [width]="120"
+              [sortable]="false"
+            >
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                  <div ngbDropdown container="body">
+                    <a
+                      ngbDropdownToggle
+                      href="javascript:void(0);"
+                      class="hide-arrow"
+                      id="dropdownBrowserState"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right"
+                      aria-labelledby="dropdownBrowserState"
+                    >
+                      <a
+                        href="javascript:void(0)"
+                        ngbDropdownItem
+                        class="d-flex align-items-center"
+                        (click)="showOutletDetail(row)"
+                        ><i data-feather="file-text" class="mr-50"></i
+                        >Details</a
+                      >
+                      <!-- <a
+                        href="javascript:void(0)"
+                        ngbDropdownItem
+                        class="d-flex align-items-center"
+                        (click)="statusChange(content, row)"
+                        >Change Status</a
+                      > -->
+                      <a
+                        href="javascript:void(0)"
+                        ngbDropdownItem
+                        class="d-flex align-items-center"
+                        (click)="deleteOutlet(row)"
+                        ><i class="fa-solid fa-trash" class="mr-50"></i
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                  <div class="edit-icon">
+                    <a href="javascript:void(0)">
+                      <i
+                        class="fa-regular fa-pen-to-square"
+                        (click)="openEditOutletModal(content1, row)"
+                      ></i>
+                    </a>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!--open change outlet status Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">
+      Change OUtlet Status Status
+    </h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0">
+    Are You Sure You Want to Change Status
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="outletStatusChange()"
+    >
+      Confirm
+    </button>
+  </div>
+</ng-template>
+<!-- open edit outlet Modal -->
+<ng-template #content1 let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Outlet</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <form
+      [formGroup]="editOutletForm"
+      class="form form-vertical"
+      (ngSubmit)="editOutletFormSubmit()"
+    >
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Outlet Name</label>
+            <input
+              type="text"
+              id="outletName"
+              class="form-control"
+              placeholder="Outlet Name"
+              formControlName="outletName"
+              name="outletName"
+              [ngClass]="{ 'is-invalid': Submitted && b.outletName.errors }"
+            />
+            <div
+              *ngIf="Submitted && b.outletName.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="b.outletName.errors.required">
+                Outlet Name is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <fieldset class="form-group">
+            <label for="file-upload-single">Outlet Image</label>
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                formControlName="outletImage"
+                id="outletImage"
+                [ngClass]="{ 'is-invalid': Submitted && b.outletImage.errors }"
+                (change)="outletImage($event)"
+              />
+              <div
+                *ngIf="Submitted && b.outletImage.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="b.outletImage.errors.required">
+                  Outlet Image is required
+                </div>
+              </div>
+              <label class="custom-file-label">Choose Image</label>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Contact No</label>
+            <input
+              type="text"
+              id="shopAddress"
+              class="form-control"
+              placeholder="Contact No"
+              formControlName="phone"
+              name="phone"
+              [ngClass]="{ 'is-invalid': Submitted && b.phone.errors }"
+            />
+            <div *ngIf="Submitted && b.phone.errors" class="invalid-feedback">
+              <div *ngIf="b.phone.errors.required">Contact No is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Area</label>
+            <input
+              type="text"
+              id="area"
+              class="form-control"
+              placeholder="Area"
+              formControlName="area"
+              name="area"
+              [ngClass]="{ 'is-invalid': Submitted && b.area.errors }"
+            />
+            <div *ngIf="Submitted && b.area.errors" class="invalid-feedback">
+              <div *ngIf="b.area.errors.required">Area is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Shop Address</label>
+            <input
+              type="text"
+              id="shopAddress"
+              class="form-control"
+              placeholder="Shop Address"
+              formControlName="shopAddress"
+              name="shopAddress"
+              [ngClass]="{ 'is-invalid': Submitted && b.shopAddress.errors }"
+            />
+            <div
+              *ngIf="Submitted && b.shopAddress.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="b.shopAddress.errors.required">
+                Shop Address is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 text-right">
+          <button type="submit" rippleEffect class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Modal add outlet-->
+<ng-template #content2 let-modal class="modal-dialog">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalCenterTitle">Add Outlet</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <form
+      [formGroup]="addOutletForm"
+      class="form form-vertical"
+      (ngSubmit)="addOutletFormSubmit()"
+    >
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Outlet Name</label>
+            <input
+              type="text"
+              id="outletName"
+              class="form-control"
+              placeholder="Outlet Name"
+              formControlName="outletName"
+              name="outletName"
+              [ngClass]="{ 'is-invalid': Submitted && f.outletName.errors }"
+            />
+            <div
+              *ngIf="Submitted && f.outletName.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.outletName.errors.required">
+                Outlet Name is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <fieldset class="form-group">
+            <label for="file-upload-single">Outlet Image</label>
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                type="file"
+                formControlName="outletImage"
+                id="outletImage"
+                [ngClass]="{ 'is-invalid': Submitted && f.outletImage.errors }"
+                (change)="selectImage($event)"
+              />
+              <div
+                *ngIf="Submitted && f.outletImage.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.outletImage.errors.required">
+                  Outlet Image is required
+                </div>
+              </div>
+              <label class="custom-file-label">Choose Image</label>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="row">
+            <div class="col-md-6 col-12">
+              <div class="form-group">
+                <label for="openingHour">Opening Hour</label>
+                <ngb-timepicker
+                  id="openingHour"
+                  [(ngModel)]="openingHourdata"
+                  name="openingHour"
+                  formControlName="openingHour"
+                  [meridian]="meridianTP"
+                ></ngb-timepicker>
+              </div>
+            </div>
+            <div class="col-md-6 col-12">
+              <div class="form-group">
+                <label for="openingHour">Closing Hour</label>
+                <ngb-timepicker
+                  id="closingHour"
+                  [(ngModel)]="closingHourdata"
+                  name="closingHour"
+                  formControlName="closingHour"
+                  [meridian]="meridianTP"
+                ></ngb-timepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <fieldset class="form-group">
+            <label for="file-upload-single">Image Preview</label>
+            <div
+              class="preview-image categary-image"
+              *ngFor="let url of imageURL"
+            >
+              <img src="{{ url }}" />
+              <span
+                ><strong>{{ selectedImage?.name }}</strong></span
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Area</label>
+            <input
+              type="text"
+              id="area"
+              class="form-control"
+              placeholder="Area"
+              formControlName="area"
+              name="area"
+              [ngClass]="{ 'is-invalid': Submitted && f.area.errors }"
+            />
+            <div *ngIf="Submitted && f.area.errors" class="invalid-feedback">
+              <div *ngIf="f.area.errors.required">Area is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Shop Address</label>
+            <input
+              type="text"
+              id="shopAddress"
+              class="form-control"
+              placeholder="Shop Address"
+              formControlName="shopAddress"
+              name="shopAddress"
+              [ngClass]="{ 'is-invalid': Submitted && f.shopAddress.errors }"
+            />
+            <div
+              *ngIf="Submitted && f.shopAddress.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.shopAddress.errors.required">
+                Shop Address is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-12 mt-1 mb-1">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="isPureVeg"
+              id="isPureVeg"
+              value="true"
+              formControlName="isPureVeg"
+            />
+            <label class="form-check-label" for="isPureVeg">Veg</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="isPureVeg"
+              id="isPureVeg"
+              value="false"
+              formControlName="isPureVeg"
+            />
+            <label class="form-check-label" for="isPureVeg">Nonveg</label>
+          </div>
+        </div>
+        <div class="col-md-6 col-12 mt-1 mb-1">
+          <label for="first-name-column">Choose Cuisine</label>
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-select-cuisine ml-1"
+            (click)="modalCuisineAdd(modalCuisine)"
+            rippleEffect
+          >
+            Cuisine
+          </button>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Contact No</label>
+            <input
+              type="text"
+              id="phone"
+              class="form-control"
+              placeholder="Contact No"
+              formControlName="phone"
+              name="phone"
+              [ngClass]="{ 'is-invalid': Submitted && f.phone.errors }"
+            />
+            <div *ngIf="Submitted && f.phone.errors" class="invalid-feedback">
+              <div *ngIf="f.phone.errors.required">Contact No is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="first-name-column">Preparation Time</label>
+            <input
+              type="text"
+              id="preparationTime"
+              class="form-control"
+              placeholder="Preparation Time"
+              formControlName="preparationTime"
+              name="preparationTime"
+              [ngClass]="{
+                'is-invalid': Submitted && f.preparationTime.errors
+              }"
+            />
+            <div
+              *ngIf="Submitted && f.preparationTime.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.preparationTime.errors.required">
+                Preparation Time is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 text-right">
+          <button type="submit" rippleEffect class="btn btn-primary">
+            Submit <i class="ml-1 fa fa-spinner fa-spin" *ngIf="loading"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!-- / Modal add offer -->
+
+<!-- select cuisine Modal -->
+<ng-template #modalCuisine let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel6">Cuisine</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div class="row">
+      <div class="col-md-3 col-12" *ngFor="let cuisine of cuisineList">
+        <div class="cuisine">
+          <div class="cuisine-img">
+            <img src="{{ cuisine.cuisineImage }}" alt="" width="50px" />
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              (click)="onCuisineSelect(cuisine)"
+              [checked]="cuisineCheck(cuisine.cuisineId)"
+            />
+            <label class="form-check-label" for="inlineCheckbox2">{{
+              cuisine.cuisineName
+            }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.close('Accept click')"
+      rippleEffect
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

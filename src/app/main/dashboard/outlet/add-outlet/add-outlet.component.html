@@ -1,0 +1,186 @@
+<div class="content-wrapper container-fluid p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <!-- <app-content-header [contentHeader]="contentHeader"></app-content-header> -->
+
+        <!-- add category Start-->
+        <section id="add-outlet-page">
+            <div class="add-outlet-form card mt-5">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        Add Outlet Details
+                    </h4>
+                </div> 
+                
+                <div class="card-body">
+                <form [formGroup]="addOutletForm" class="form form-vertical" (ngSubmit)="addOutletFormSubmit()">
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Outlet Name</label>
+                                <input type="text" id="outletName" class="form-control" placeholder="Outlet Name" formControlName="outletName"
+                                    name="outletName" [ngClass]="{ 'is-invalid': Submitted && f.outletName.errors }"/>
+                                    <div *ngIf="Submitted && f.outletName.errors" class="invalid-feedback">
+                                        <div *ngIf="f.outletName.errors.required">Outlet Name is required</div>
+                                        
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <fieldset class="form-group">
+                                <label for="file-upload-single">Outlet Image</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" type="file" formControlName="outletImage"
+                                        id="outletImage" [ngClass]="{ 'is-invalid': Submitted && f.outletImage.errors }" (change)="outletImage($event)"/>
+                                        <div *ngIf="Submitted && f.outletImage.errors" class="invalid-feedback">
+                                            <div *ngIf="f.outletImage.errors.required">Outlet Image is required</div>
+                                        </div>
+                                    <label class="custom-file-label">Choose Image</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        
+                        <div class="col-md-6 col-12">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="openingHour">Opening Hour</label>
+                                        <ngb-timepicker id="openingHour" [(ngModel)]="openingHourdata" name="openingHour" formControlName="openingHour"
+                                          [meridian]="meridianTP"></ngb-timepicker>
+                                      </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="openingHour">Closing Hour</label>
+                                        <ngb-timepicker id="closingHour" [(ngModel)]="closingHourdata" name="closingHour" formControlName="closingHour"
+                                          [meridian]="meridianTP"></ngb-timepicker>
+                                      </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <fieldset class="form-group">
+                                <label for="file-upload-single">Image Preview</label>
+                                <div class="preview-image categary-image" *ngFor="let url of imageURL">
+                                    <img src="{{url}}">
+                                    <span><strong>{{ selectedImage?.name }}</strong></span>
+                                </div>
+                            </fieldset>
+                        </div>
+                        
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Area</label>
+                                <input type="text" id="area" class="form-control" placeholder="Area" formControlName="area"
+                                    name="area" [ngClass]="{ 'is-invalid': Submitted && f.area.errors }"/>
+                                    <div *ngIf="Submitted && f.area.errors" class="invalid-feedback">
+                                        <div *ngIf="f.area.errors.required">Area is required</div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Shop Address</label>
+                                <input type="text" id="shopAddress" class="form-control" placeholder="Shop Address" formControlName="shopAddress"
+                                    name="shopAddress" [ngClass]="{ 'is-invalid': Submitted && f.shopAddress.errors }"/>
+                                    <div *ngIf="Submitted && f.shopAddress.errors" class="invalid-feedback">
+                                        <div *ngIf="f.shopAddress.errors.required">Shop Address is required</div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12 mt-1 mb-1">
+                            <div class="form-check form-check-inline" >
+                                <input class="form-check-input" type="radio" name="isPureVeg" id="isPureVeg" value="true" formControlName="isPureVeg"/>
+                                <label class="form-check-label" for="isPureVeg">Veg</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="isPureVeg" id="isPureVeg" value="false" formControlName="isPureVeg"/>
+                                <label class="form-check-label" for="isPureVeg">Nonveg</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12 mt-1 mb-1">
+                            <label for="first-name-column">Choose Cuisine</label>
+                            <button type="button" class="btn btn-outline-primary btn-select-cuisine ml-1" (click)="modalCuisineAdd(modalCuisine)" rippleEffect>Cuisine</button>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Contact No</label>
+                                <input type="text" id="phone" class="form-control" placeholder="Contact No" formControlName="phone"
+                                    name="phone" [ngClass]="{ 'is-invalid': Submitted && f.phone.errors }"/>
+                                    <div *ngIf="Submitted && f.phone.errors" class="invalid-feedback">
+                                        <div *ngIf="f.phone.errors.required">Contact No  is required</div>
+                                    </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Outlet Type</label>
+                                <input type="text" id="type" class="form-control" placeholder="Outlet Type" formControlName="type"
+                                    name="type" [ngClass]="{ 'is-invalid': Submitted && f.type.errors }"/>
+                                    <div *ngIf="Submitted && f.type.errors" class="invalid-feedback">
+                                        <div *ngIf="f.type.errors.required">Outlet Type is required</div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="first-name-column">Preparation Time</label>
+                                <input type="text" id="preparationTime" class="form-control" placeholder="Preparation Time" formControlName="preparationTime"
+                                    name="preparationTime" [ngClass]="{ 'is-invalid': Submitted && f.preparationTime.errors }"/>
+                                    <div *ngIf="Submitted && f.preparationTime.errors" class="invalid-feedback">
+                                        <div *ngIf="f.preparationTime.errors.required">Preparation Time is required</div>
+                                    </div>
+
+                            </div>
+                        </div>
+
+                        
+                        
+                        <div class="col-12 text-right">
+                            <button type="submit" rippleEffect class="btn btn-primary">Submit <i class="ml-1 fa fa-spinner fa-spin" *ngIf="loading"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </section>
+        <!-- add category End-->
+    </div>
+</div>
+
+
+<!-- Modal Add Cuisine-->
+<ng-template #modalCuisine let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel6">Cuisine</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row">
+        <div class="col-md-3 col-12"  *ngFor="let cuisine of cuisineList">
+            <div class="cuisine">
+                <div class="cuisine-img">
+                    <img src="{{cuisine.cuisineImage}}" alt="" width="50px">
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" (click)="onCuisineSelect(cuisine)" [checked]="cuisineCheck(cuisine.cuisineId)" />
+                    <label class="form-check-label" for="inlineCheckbox2">{{cuisine.cuisineName}}</label>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
+            Submit
+        </button>
+    </div>
+</ng-template>
+<!-- / Modal -->

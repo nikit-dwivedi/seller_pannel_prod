@@ -1,0 +1,92 @@
+<div class="login-wrapper">
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-7">
+            <div class="login-img">
+              <img src="assets/images/pages/login.svg" alt="">
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="login-form">
+              <div class="welcome-sec">
+                Welcome
+              </div>
+              <div class="login-logo">
+                <a> <img src="assets/images/logo/logo.png" alt="" width="220"></a>
+              </div>
+              <h5>Login Your Account</h5>
+
+
+              <div class="mobile-form"  *ngIf="mobileForm == true">
+              <form [formGroup]="loginForm"  (ngSubmit)="onSubmit()">
+                <div class="form-group mb-3 mt-3">
+                  <input type="text" formControlName="number" class="form-control"
+                            (keypress)="($event.charCode >= 48 && $event.charCode < 58)" name="number"
+                            placeholder="Enter your mobile number" aria-describedby="number" tabindex="1" autofocus
+                            [ngClass]="{ 'is-invalid': submitted && f.number.errors }" />
+                        <div *ngIf="submitted && f.number.errors" class="invalid-feedback">
+                            <div *ngIf="f.number.errors.required"> Mobile Number is required</div>
+                            <div *ngIf="loginForm.get('number').hasError('maxlength')">
+                                Mobile Number requied only 10 characters.
+                            </div>
+                            <div *ngIf="loginForm.get('number').hasError('minlength')">
+                              Mobile Number requied only 10 characters.
+                          </div>
+                        </div> 
+                </div>
+                <div class="text-center mt-4">
+                  <div id="sign-in-button"></div>
+                  <p>By clicking 'Continue' you have read and agree with our terms and conditions.</p>
+                  <button type="submit" class="btn btn-lg btn-primary btn-login">Continue</button>
+                </div>
+              </form>
+              </div>
+
+
+              <div class="otp-form" *ngIf="mobileForm == false">
+              <form [formGroup]="otpVerifyForm"  (ngSubmit)="otpVerifySubmit()">
+                <h4 class="otp-text">Please enter 4 digit OTP received on your phone {{MobileNumber}}.</h4>
+                <div class="mb-3 mt-3">
+                  <!-- <input class="form-control" type="text" name="otp"
+                    placeholder="Enter OTP code" formControlName="otp"  (keypress)="($event.charCode >= 48 && $event.charCode < 58)" 
+                     aria-describedby="number" tabindex="1" autofocus
+                    [ngClass]="{ 'is-invalid': submitted && f.otp.errors }" />
+                    <div *ngIf="submitted && f.otp.errors" class="invalid-feedback">
+                      <div *ngIf="f.otp.errors.required"> OTP is required</div>
+                      <div *ngIf="otpVerifyForm.get('otp').hasError('maxlength')">
+                        OTP  requied only 4 characters.
+                      </div>
+                      <div *ngIf="otpVerifyForm.get('otp').hasError('minlength')">
+                        OTP  requied only 4 characters.
+                    </div>
+                  </div> -->
+                  <input type="text" formControlName="otp" class="form-control"
+                  (keypress)="($event.charCode >= 48 && $event.charCode < 58)" name="otp"
+                  placeholder="Enter 4 digit OTP" aria-describedby="number" tabindex="1" autofocus
+                  [ngClass]="{ 'is-invalid': submitted && g.otp.errors }" />
+              <div *ngIf="submitted && g.otp.errors" class="invalid-feedback">
+                  <div *ngIf="g.otp.errors.required"> OTP is required</div>
+                  <div *ngIf="otpVerifyForm.get('otp').hasError('maxlength')">
+                    OTP  requied only 4 characters.
+                  </div>
+                  <div *ngIf="otpVerifyForm.get('otp').hasError('minlength')">
+                    OTP requied only 4 characters.
+                </div> 
+              </div> 
+                </div>
+                <div class="text-center mt-4"  >
+                  <div id="recaptcha-container"></div>
+                  <button type="submit" class="btn btn-lg btn-primary btn-login">Verify &
+                    Login</button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

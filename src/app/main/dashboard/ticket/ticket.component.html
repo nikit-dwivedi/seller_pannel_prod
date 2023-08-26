@@ -1,0 +1,178 @@
+<div class="content-wrapper container-fluid p-0">
+    <div class="content-body">
+        <section class="ticket-page">
+            <div class="d-flex align-items-baseline justify-content-between">
+                <div class="d-flex justify-content-evenly">
+                    <!--  <div class="form-group">
+                        <select class="form-control" id="basicSelect">
+                            <option>Customer</option>
+                            <option>Merchant</option>
+                        </select>
+                    </div> -->
+                    <div class=" form-group">
+                        <select class="form-control" id="basicSelect" (change)="selcectStatus($event)">
+                            <option value="All">All</option>
+                            <option value="Open">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <!--  <div class="date-range d-flex align-items-baseline justify-content-between pb-1 pl-1 pl-md-0 pb-md-0">
+                    <div class="input-group mb-1 search-table mr-1">
+                        <input type="search" placeholder="Search" class="form-control ml-25"
+                            (keyup)="filterUpdate($event)" (search)="filterUpdate($event)" />
+                    </div>
+                    <button csvLink (click)="downloadCSV($event)"
+                        class="btn btn-outline-secondary float-right csv-export m" rippleEffect>
+                        <img src="assets/images/icons/csv.png" alt=""> </button>
+                </div> -->
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card" *ngFor="let ticket of allTicket">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ticket.issue}}</h4>
+                            <div class="card-subtitle text-muted mb-1"><strong>Description:</strong> <span>
+                                    {{ticket.description}} </span></div>
+                            <hr>
+                            <p class="card-text">
+                                <strong>Ticket Id :</strong> <span> {{ticket.ticketId}}</span>
+                            </p>
+                            <!--  <p class="card-text">
+                                <strong>Order Items :</strong> <span> chicken roll X1</span>
+                            </p> -->
+                            <button class="btn btn-outline-primary"
+                                (click)="modalProductView(productView,ticket.ticketId)">View
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- open view product details -->
+                <ng-template #productView let-modal>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel6">Ticket Details</h5>
+                        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" tabindex="0" ngbAutofocus>
+                        <div class="row">
+                            
+                            <div class="col-md-12">
+                                <h3></h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="product-view-box">
+                                            <div><strong>Product Name</strong></div>
+                                            <div>
+                                                <p>{{ticketDetails?.productNameList}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="product-view-box">
+                                            <div><strong>Customer Name</strong></div>
+                                            <div>
+                                            <p>
+                                                {{ticketDetails?.orderDetails?.client?.clientName}}
+                                            </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="product-view-box">
+                                            <div><strong>Issue</strong></div>
+                                            <div>
+                                                <p>{{ticketDetails?.issue}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="product-view-box">
+                                            <div><strong>Description</strong></div>
+                                            <div>
+                                            <p>
+                                                {{ticketDetails?.description}}
+                                            </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="product-view-box">
+                                            <div><strong>status</strong></div>
+                                            <div>
+                                            <p>
+                                                {{ticketDetails?.status}}
+                                            </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                       <!--  <div class="product-view-box">
+                                            <div class="custom-control custom-control-primary custom-switch">
+                                                <div class="mb-50"><strong>In Stock</strong></div>
+                                                <input type="checkbox" [checked]="inStock(product)"
+                                                    class="custom-control-input" id="customSwitch3"
+                                                    (change)="changeStockStatus(product)" />
+                                                <label class="custom-control-label" for="customSwitch3"></label>
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                    <!-- <div class="col-md-12">
+                                        <div class="product-view-box">
+                                            <button class="btn btn-outline-primary mr-1"
+                                                (click)="openViewCustomizationModal(customizationList,product)"
+                                                rippleEffect>Customization</button>
+                                            <button class="btn btn-outline-primary"
+                                                (click)="openViewAddonModal(addOn,product)" rippleEffect>Addons</button>
+                                        </div>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <!-- view order details section -->
+                <!-- <ng-container *ngIf="isShow">
+                    <div class="col-md-7">
+                        <div class="card view-details">
+                            <div class="Cross-btn mr-1">
+                                
+                                <button type="button" class="close" (click)="closeDetails()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title d-flex">{{ticketDetails?.issue}}</h4>
+                                <hr>
+                                <div class="media">
+                                    <div class="avatar mr-1">
+                                        <img src="assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" width="42"
+                                            height="42" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mb-0">Shyama Thakur</h5>
+                                        <small class="text-muted">1 Order With Fablo Food</small>
+                                    </div>
+                                </div>
+                                <img class="ticket-wrong-image" src="assets/images/pages/wrong-item.jpg" />
+                                <div
+                                    class="d-flex align-items-baseline justify-content-between pb-1 pl-1 pl-md-0 pb-md-0 mt-2">
+                                    <h5><strong>Issue with:</strong> <span> 1X Chicken Roll</span> <strong>₹
+                                            210</strong>
+                                    </h5>
+                                    <button class="btn btn-outline-primary">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-container> -->
+            </div>
+        </section>
+    </div>
+</div>

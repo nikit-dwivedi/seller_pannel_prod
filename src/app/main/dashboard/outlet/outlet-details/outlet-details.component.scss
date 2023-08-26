@@ -1,0 +1,14 @@
+::ng-deep .product-detail-modal{
+    max-width: 100%;
+    margin: 0;
+}
+::ng-deep .product-detail-modal .modal-dialog{
+    max-width: 100%;
+    margin: 0;
+}
+@media only screen and (min-width: 576px){
+    ::ng-deep .product-detail-modal .modal-dialog{
+        max-width: 100%;
+        margin: 0;
+    }
+}

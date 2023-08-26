@@ -1,0 +1,230 @@
+<div class="content-wrapper container-fluid p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <!-- <app-content-header [contentHeader]="contentHeader"></app-content-header> -->
+
+        <!-- Order History Start-->
+        <section id="order-history-page">
+
+            <div class="d-flex align-items-center justify-content-between pb-1 pl-1 pl-md-0 pb-md-0">
+                <h4 class="card-title">Outlet Order History</h4>
+                <div class="outlet-btn-sec d-flex align-items-baseline justify-content-end pb-1 pl-1 pl-md-0 pb-md-0">
+                    <div class="form-group mr-1 search-table">
+                        <input type="search" placeholder="Search" class="form-control ml-25"
+                            (keyup)="filterUpdate($event)" (search)="filterUpdate($event)" />
+                    </div>
+                    <div class="date-range mr-1">
+
+                        <ng2-flatpickr [config]="DateRangeOptions" name="DateRange" placeholder="Date"
+                            (change)="getDate($event)"></ng2-flatpickr>
+                    </div>
+
+                    <div class="form-group mr-1">
+
+                        <select class="form-control" id="basicSelect" (change)="getOrderStatus($event)">
+                            <option value="all">All Order</option>
+                            <option value="pending">Pending</option>
+                            <option value="preparing">Preparing</option>
+                            <option value="ready">Ready</option>
+                            <option value="dispatched">Dispatched</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+
+                    <button csvLink (click)="downloadCSV($event)"
+                        class="btn btn-outline-secondary float-right csv-export" rippleEffect><img
+                            src="assets/images/icons/csv.png" alt=""> </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="order-list">
+
+                        <div class="order-box-main">
+                            <div class="card card-app-design" *ngFor="let order of ordersList">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="badge badge-pill" [ngClass]="buttonClass(order.status)">
+                                            {{order.status}}</div>
+                                        <div class="order-time-and-date"><span>{{order.timing.at(-1).time}}</span> |
+                                            <span>{{order.timing.at(-1).date}}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <p><strong>ID:</strong> {{order?.orderId}}</p>
+                                        <p><strong>Order By:</strong> {{order?.client?.clientName}}</p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex align-items-center justify-content-between"
+                                        *ngFor="let product of order.productList">
+                                        <p>{{product.productName}} X {{product.quantity}}</p>
+                                        <p><strong>Paid</strong> ₹{{product?.productPrice}}  ({{product?.quantityPrice}})</p>
+                                    </div>
+                                    <hr>
+                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                        (click)="viewOrderDetails(order)" rippleEffect>View
+                                        Details</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <ng-container *ngIf="isShow" class="order-details" >
+                        
+                        <div class="card card-user-timeline view-details">
+                            <div class="Cross-btn mr-1">
+                                
+                                <button type="button" class="close" (click)="closeDetails()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="badge badge-pill" [ngClass]="buttonClass(orderView.status)">
+                                        {{orderView.status}}</div>
+                                    <div class="order-time-and-date"><strong>Order By:</strong>
+                                        {{orderView.client.clientName}}</div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <p><strong>ID:</strong> {{orderView.orderId}}</p>
+                                    <p><span>{{orderView.timing.at(-1).time}}</span> | <span>{{orderView.timing.at(-1).date}}</span></p>
+                                </div>
+
+                                <hr>
+                                <h4>Order Timeline</h4>
+                                <div class="order-timeline">
+                                    <div class="horizontal timeline">
+                                        <div class="steps">
+                                            <div class="step">
+                                                <span class="status">Init</span>
+                                                <span class="timing">{{initTime[0]}}</span>
+                                            </div>
+                                            <div class="step">
+                                                <span class="status">pending</span>
+                                                <span class="timing">{{pendingTime[0]}}</span>
+                                            </div>
+                                            <div *ngIf="orderView.status == 'delivered'" class="step">
+                                                <span class="status">preparing</span>
+                                                <span class="timing">{{preparingTime[0]}}</span>
+                                            </div>
+                                            <div *ngIf="orderView.status == 'delivered'" class="step">
+                                                <span class="status">ready</span>
+                                                <span class="timing">{{readyTime[0]}}</span>
+                                            </div>
+                                            <div *ngIf="orderView.status == 'delivered'" class="step">
+                                                <span class="status">dispatched</span>
+                                                <span class="timing">{{dispatchedTime[0]}}</span>
+                                            </div>
+                                            <div *ngIf="orderView.status == 'delivered'" class="step">
+                                                <span class="status">delivered</span>
+                                                <span class="timing">{{deliveredTime[0]}}</span>
+                                            </div>
+                                            <div *ngIf="orderView.status == 'cancelled'" class="step current">
+                                                <span class="status">Cancelled</span>
+                                                <span class="timing">{{cancelledTime[0]}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="order-details">
+                                    <h4 class="mb-1">Order Details</h4>
+                                    <div class="d-flex align-items-center justify-content-between"
+                                        *ngFor="let product of orderView.productList">
+                                        <p>{{product.productName}} X {{product.quantity}}</p>
+                                        <p>₹{{product.quantityPrice}}</p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p><strong>Taxes</strong></p>
+                                        <p><strong>₹{{orderView.amount.taxAmount}}</strong></p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p><strong>Discount</strong></p>
+                                        <p><strong>₹{{orderView.amount.discountedAmount}}</strong></p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p><strong>Total Bill</strong> <span class="badge badge-pill ml-1"
+                                            [ngClass]="SelectPaymentColor(orderView.payment.paymentStatus)">{{orderView.payment.paymentStatus}}</span>
+                                    </p>
+                                    <p><strong>₹{{orderView?.payableAmount}}</strong></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="d-flex total-bill">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p><strong>Settlement:</strong></p>
+                                        <p><strong class="ml-1">₹{{orderView.amount.totalAmount - orderView.amount.discountedAmount}}</strong></p>
+                                    </div>
+                                    <div class="creat-ticket">
+                                        <button class="btn btn-outline-primary btn-block" (click)="openCretTicketModal(creatTicket,orderView)">Raise Ticket</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+
+        </section>
+        <!-- Order History End-->
+    </div>
+</div>
+
+
+<ng-template #creatTicket let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">Creat Ticket</h4>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <form [formGroup]="creatTicketForm" class="form form-vertical" (ngSubmit)="creatTicketFormSubmit()">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Issue</label>
+                        <input type="text" id="productName" class="form-control" placeholder="Issue"
+                            formControlName="issue" name="issue"
+                            [ngClass]="{ 'is-invalid': Submitted && ticket.issue.errors }" />
+                        <div *ngIf="Submitted && ticket.issue.errors" class="invalid-feedback">
+                            <div *ngIf="ticket.issue.errors.required">Issue is required</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Description</label>
+                        <input type="text" id="productPrice" class="form-control" placeholder="Description"
+                            formControlName="description" name="description"
+                            [ngClass]="{ 'is-invalid': Submitted && ticket.description.errors }" />
+                        <div *ngIf="Submitted && ticket.description.errors" class="invalid-feedback">
+                            <div *ngIf="ticket.description.errors.required">Description is required</div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                
+                <div class="col-6">
+                    <button type="submit" rippleEffect class="block-btn btn btn-primary">Save</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</ng-template>
