@@ -39,7 +39,7 @@
               "sweetalert2",
               "bs-stepper"
             ],
-            "outputPath": "dist/merchant-seller-panel",
+            "outputPath": "dist/seller-panel",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
