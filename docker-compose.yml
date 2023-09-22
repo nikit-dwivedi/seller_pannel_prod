@@ -10,7 +10,7 @@ services:
       - "8089:80"  # Map host port 8080 to container port 80
     networks:
       sellerpannel:
-        ipv4_address: 172.28.0.3
+        ipv4_address: 172.28.0.2
 
 networks:
   sellerpannel:
