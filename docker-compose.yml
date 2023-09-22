@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  lb:
+    image: haproxy
+    ports:
+      - "8088:8080"
+    restart: always
+    networks:
+      sellerpannel:
+        ipv4_address: 172.28.0.2 # Assign a static IP address to the lb service
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+
+  sellerpannelservice1:
+    image: sellerpannelservice
+    environment:
+      - APPID=1111
+    restart: always
+    networks:
+      sellerpannel:
+        ipv4_address: 172.28.0.3 # Assign a static IP address to marvellousservice1
+
+networks:
+  sellerpannel:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16 # Define a subnet for your macvlan network
