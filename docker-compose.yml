@@ -1,20 +1,20 @@
 version: '3'
-
 services:
-  sellerpannelservice1:
-    image: sellerpannelservice
-    environment:
-      - APPID=1111
+  sellerpannelservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sellerpannelservice
     restart: always
     ports:
-      - "8089:80"  # Map host port 8080 to container port 80
+      - "8089:80"
     networks:
       sellerpannel:
         ipv4_address: 172.28.0.2
 
 networks:
   sellerpannel:
+    driver: bridge
     ipam:
-      driver: default
       config:
         - subnet: 172.28.0.0/16
